@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Household Meal Planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="config.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Meal Planner</div>
+    <nav id="nav" hidden>
+      <button data-tab="add">+ Add recipe</button>
+      <button data-tab="recipes" class="active">Recipes</button>
+      <button data-tab="planner">Weekly plan</button>
+      <button data-tab="grocery">Grocery list</button>
+      <button id="logout" class="ghost">Sign out</button>
+    </nav>
+  </header>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <main>
+    <section id="login-view" class="card login">
+      <h2>Sign in</h2>
+      <form id="login-form">
+        <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" required>
+        <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" required>
+        <button type="submit" class="primary">Sign in</button>
+      </form>
+      <p id="login-msg" class="muted"></p>
+    </section>
+
+    <section id="app-view" hidden>
+
+      <div id="tab-add" class="tab" hidden>
+        <div class="card">
+          <h2>Add a recipe</h2>
+          <label class="upload">
+            <span>Upload a recipe PDF to fill the form</span>
+            <input type="file" id="r-pdf" accept="application/pdf">
+          </label>
+          <p id="pdf-status" class="status"></p>
+          <form id="recipe-form">
+            <label>Title <input id="r-title" required></label>
+            <label>Description <textarea id="r-desc" rows="2" placeholder="Optional"></textarea></label>
+            <div class="row">
+              <label>Minutes <input type="number" id="r-minutes" min="0"></label>
+              <label>Servings <input type="number" id="r-servings" min="1" value="4"></label>
+            </div>
+            <label>Tags <input id="r-tags" placeholder="Comma separated, e.g. chicken, quick, kid-friendly"></label>
+            <label>Ingredients <span class="muted">(one per line)</span>
+              <textarea id="r-ingredients" rows="7"></textarea>
+            </label>
+            <label>Steps
+              <textarea id="r-steps" rows="8"></textarea>
+            </label>
+            <button type="submit" class="primary">Save recipe</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="tab-recipes" class="tab">
+        <div class="toolbar">
+          <input id="search" placeholder="Search recipes or ingredients">
+          <select id="tag-filter"><option value="">All tags</option></select>
+        </div>
+        <div id="recipe-list" class="grid"></div>
+      </div>
+
+      <div id="tab-planner" class="tab" hidden>
+        <div id="planner"></div>
+      </div>
+
+      <div id="tab-grocery" class="tab" hidden>
+        <form id="grocery-form" class="add-item">
+          <input id="g-new" placeholder="Add something: napkins, distilled water...">
+          <button type="submit" class="primary">Add</button>
+        </form>
+        <div id="grocery-list"></div>
+      </div>
+
+    </section>
+  </main>
+
+  <dialog id="recipe-dialog">
+    <div class="dialog-body">
+      <button id="dialog-close" class="ghost dialog-close">Close</button>
+      <h2 id="d-title"></h2>
+      <p id="d-meta" class="muted"></p>
+      <h3>Ingredients</h3>
+      <ul id="d-ingredients"></ul>
+      <h3>Steps</h3>
+      <ol id="d-steps"></ol>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
